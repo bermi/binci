@@ -49,14 +49,16 @@ describe('images', () => {
   })
   describe('getBuiltImages', () => {
     it('gets and processes a list of images', () => {
-      sandbox.stub(cp, 'execSync', () => ({ toString: () => (
-        '{"tag":"bc_deadbeefbeef","createdAt":"2017-11-07 15:03:13 -0500 EST"}\n' +
+      sandbox.stub(cp, 'execSync', () => ({
+        toString: () => (
+          '{"tag":"bc_deadbeefbeef","createdAt":"2017-11-07 15:03:13 -0500 EST"}\n' +
         '{"tag":"bc_deadb00fb00f","createdAt":"2017-11-07 15:03:12 -0500 EST"}'
-      )}))
+        )
+      }))
       return images.getBuiltImages().then(images => {
         expect(images).to.deep.equal([
-          {hash: 'deadbeefbeef', 'createdAt': 1510084993000},
-          {hash: 'deadb00fb00f', 'createdAt': 1510084992000}
+          { hash: 'deadbeefbeef', createdAt: 1510084993000 },
+          { hash: 'deadb00fb00f', createdAt: 1510084992000 }
         ])
       })
     })
@@ -72,9 +74,11 @@ describe('images', () => {
       sandbox.stub(output, 'info')
     })
     it('logs message with missing service images', () => {
-      sandbox.stub(cp, 'execSync', () => ({ toString: () => (
-        'REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE'
-      )}))
+      sandbox.stub(cp, 'execSync', () => ({
+        toString: () => (
+          'REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE'
+        )
+      }))
       const cfg = [{
         name: 'node',
         args: ['fake_node:latest']
@@ -84,10 +88,12 @@ describe('images', () => {
       })
     })
     it('logs nothing if local service images are found', () => {
-      sandbox.stub(cp, 'execSync', () => ({ toString: () => (
-        'REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE\n' +
+      sandbox.stub(cp, 'execSync', () => ({
+        toString: () => (
+          'REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE\n' +
         'node                latest              f697cb5f31f8        12 months ago       675MB'
-      )}))
+        )
+      }))
       const cfg = [{
         name: 'node',
         args: ['node:latest']
@@ -129,8 +135,8 @@ describe('images', () => {
         return Promise.resolve()
       })
       return images.buildImage('./Foo', ['bar', 'baz', 'tek']).then(() => {
-        expect(args).to.deep.equal([ 'build', '-f', '/tmp/Foo',
-          '-t', 'bar', '-t', 'baz', '-t', 'tek', '/tmp' ])
+        expect(args).to.deep.equal(['build', '-f', '/tmp/Foo',
+          '-t', 'bar', '-t', 'baz', '-t', 'tek', '/tmp'])
       })
     })
     it('rejects when the command fails', () => {
@@ -142,7 +148,7 @@ describe('images', () => {
     it('returns the name of an existing image when it matches', () => {
       sandbox.stub(images, 'getHash', () => 'deadbeefbeef')
       sandbox.stub(images, 'getBuiltImages', () => [
-        {hash: 'deadbeefbeef', createdAt: 1510084993000}
+        { hash: 'deadbeefbeef', createdAt: 1510084993000 }
       ])
       return images.getImage().then(id => {
         expect(id).to.equal('tmp:bc_deadbeefbeef')
@@ -151,7 +157,7 @@ describe('images', () => {
     it('rejects when the Dockerfile is not found', () => {
       sandbox.stub(images, 'getHash', () => null)
       sandbox.stub(images, 'getBuiltImages', () => [
-        {hash: 'deadbeefbeef', createdAt: 1510084993000}
+        { hash: 'deadbeefbeef', createdAt: 1510084993000 }
       ])
       return expect(images.getImage()).to.be.rejectedWith(/does not exist/)
     })
@@ -167,8 +173,8 @@ describe('images', () => {
     it('deletes an old image after a successful build', () => {
       sandbox.stub(images, 'getHash', () => 'deadb00fb00f')
       sandbox.stub(images, 'getBuiltImages', () => [
-        {hash: 'deadbeefbeef', createdAt: 1510084993000},
-        {hash: 'deadbaafbaaf', createdAt: 1510084992000}
+        { hash: 'deadbeefbeef', createdAt: 1510084993000 },
+        { hash: 'deadbaafbaaf', createdAt: 1510084992000 }
       ])
       sandbox.stub(images, 'buildImage', (df, name) => Promise.resolve(name))
       const spy = sandbox.stub(images, 'deleteImage', () => Promise.resolve())

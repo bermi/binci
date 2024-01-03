@@ -56,7 +56,7 @@ describe('index', () => {
     })
     it('rejects after services fail to start', () => {
       const cfg = { services: ['foo'] }
-      sandbox.stub(services, 'run', () => Promise.reject())
+      sandbox.stub(services, 'run', () => Promise.reject(new Error('failed')))
       return expect(instance.startServices(cfg)).to.be.rejected()
     })
   })
@@ -90,7 +90,7 @@ describe('index', () => {
         })
     })
     it('starts command, fails, and throws', () => {
-      sandbox.stub(proc, 'run', () => Promise.reject(1))
+      sandbox.stub(proc, 'run', () => Promise.reject(new Error('failed')))
       return expect(instance.runCommand({ primary: ['foo'] })).to.be.rejectedWith('Command failed')
     })
   })
@@ -100,7 +100,7 @@ describe('index', () => {
       return instance.getProjectConfig().then(cfg => {
         expect(cfg).to.have.property('from').equal('node:6')
         expect(cfg).to.have.property('exec').equal('echo "foo"')
-        expect(cfg).to.have.property('expose').deep.equal([ '8080:8080' ])
+        expect(cfg).to.have.property('expose').deep.equal(['8080:8080'])
       })
     })
     it('removes the "from" param when -b is passed to the cli', () => {
@@ -199,24 +199,24 @@ describe('index', () => {
         })
     })
     it('throws when unable to start services', () => {
-      sandbox.stub(instance, 'startServices', () => Promise.reject())
+      sandbox.stub(instance, 'startServices', () => Promise.reject(new Error('failed')))
       args.raw = { _: ['env'], c: configPath }
       return expect(instance.start()).to.be.rejected()
     })
     it('throws when unable to write exec file to tmp', () => {
-      sandbox.stub(fs, 'writeFileAsync', () => Promise.reject())
+      sandbox.stub(fs, 'writeFileAsync', () => Promise.reject(new Error('failed')))
       sandbox.stub(instance, 'startServices', () => Promise.resolve())
       sandbox.stub(instance, 'runCommand', () => Promise.resolve())
       sandbox.stub(fs, 'unlinkAsync', () => Promise.resolve())
-      args.raw = { 'f': 'notactuallyanimage', _: ['env'], c: configPath }
+      args.raw = { f: 'notactuallyanimage', _: ['env'], c: configPath }
       return expect(instance.start()).to.be.rejected()
     })
     it('throws when unable to start primary container', () => {
       sandbox.stub(fs, 'writeFileAsync', () => Promise.resolve())
       sandbox.stub(instance, 'startServices', () => Promise.resolve())
-      sandbox.stub(instance, 'runCommand', () => Promise.reject())
+      sandbox.stub(instance, 'runCommand', () => Promise.reject(new Error('failed')))
       sandbox.stub(fs, 'unlinkAsync', () => Promise.resolve())
-      args.raw = { 'f': 'notactuallyanimage', _: ['env'], c: configPath }
+      args.raw = { f: 'notactuallyanimage', _: ['env'], c: configPath }
       return expect(instance.start()).to.be.rejected()
     })
     it('resolves when config, services and primary container run successfully', () => {

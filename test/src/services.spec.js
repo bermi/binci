@@ -60,7 +60,7 @@ describe('services', () => {
       })
     })
     it('rejects when a service fails to start', () => {
-      procRunStub = sinon.stub(proc, 'run', () => Promise.reject())
+      procRunStub = sinon.stub(proc, 'run', () => Promise.reject(new Error('failed')))
       return services.run([{ name: 'fart', args: ['foo'] }])
         .then(() => {
           throw new Error('Should have failed')
@@ -79,7 +79,6 @@ describe('services', () => {
           testError.svcs = ['bc_fail_test']
           throw testError
         }
-        return
       }))
     })
     afterEach(() => {
@@ -181,7 +180,7 @@ describe('services', () => {
         run: ['test', 'lint']
       }
       // testing -d arg for config-disabled service
-      services.disabled = [ 'shared' ]
+      services.disabled = ['shared']
       expect(services.filterEnabled(cfg).services).to.deep.equal([{ onlyTest: { from: 'onlyTest' } }])
       expect(services.disabled[0]).to.equal('shared')
     })
@@ -191,9 +190,9 @@ describe('services', () => {
         tasks: { test: { disable: ['configSvc'], cmd: 'echo hello' } },
         run: ['test']
       }
-      services.disabled = [ 'cliSvc' ]
+      services.disabled = ['cliSvc']
       expect(services.filterEnabled(cfg).services).to.deep.equal([{ keep: { from: 'test' } }])
-      expect(services.disabled).to.deep.equal([ 'configSvc', 'cliSvc' ])
+      expect(services.disabled).to.deep.equal(['configSvc', 'cliSvc'])
     })
   })
 })

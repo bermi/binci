@@ -12,7 +12,7 @@ describe('config', () => {
   })
   afterEach((done) => {
     process.cwd.restore()
-    rimraf(`${__dirname}/tmp`, done)
+    rimraf(path.join(__dirname, '/tmp'), done)
   })
   describe('load', () => {
     it('loads the $CWD/binci.yml default config location', () => {

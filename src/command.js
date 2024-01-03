@@ -23,7 +23,7 @@ const command = {
    */
   parseHostEnvVars: (str) => str.toString().replace(/\$\{([^}]+)\}/g, (i, match) => {
     const [envVar, defaultValue = ''] = match.split(':-')
-    return process.env.hasOwnProperty(envVar) ? process.env[envVar] : defaultValue
+    return process.env[envVar] || defaultValue
   }),
   /**
    * Parses volumes to allow relative pathing from host mounts

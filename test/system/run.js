@@ -40,7 +40,7 @@ const runner = (() => {
     console.log('Invalid tests.json file')
     process.exit(1)
   }
-  let testFails = []
+  const testFails = []
   Promise.mapSeries(_.keys(tests), (name) => {
     const testObj = tests[name]
     console.log('\n\n#----------------------------------------------')

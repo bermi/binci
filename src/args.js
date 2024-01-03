@@ -24,17 +24,17 @@ const args = {
    * - @property {string} help - the help text to display to the user
    */
   available: {
-    'h': { action: 'showHelp', help: 'Displays help and usage' },
-    'v': { action: 'showVersion', help: 'Displays the current installed version' },
-    'e': { prop: 'exec', help: 'Run a custom command instead of defined task' },
-    'f': { prop: 'from', help: 'Run with specified docker image' },
-    'c': { prop: 'configPath', help: 'Run with custom config file path' },
-    'b': { prop: 'dockerfile', help: 'Build a base image with the specified dockerfile' },
-    'd': { action: 'disable', help: 'Disable specified service' },
-    'init': { action: 'init', help: 'Initialize new Binci project config' },
+    h: { action: 'showHelp', help: 'Displays help and usage' },
+    v: { action: 'showVersion', help: 'Displays the current installed version' },
+    e: { prop: 'exec', help: 'Run a custom command instead of defined task' },
+    f: { prop: 'from', help: 'Run with specified docker image' },
+    c: { prop: 'configPath', help: 'Run with custom config file path' },
+    b: { prop: 'dockerfile', help: 'Build a base image with the specified dockerfile' },
+    d: { action: 'disable', help: 'Disable specified service' },
+    init: { action: 'init', help: 'Initialize new Binci project config' },
     'disable-all': { action: 'disableAll', help: 'Disable all configured services' },
-    'tasks': { action: 'tasks', help: 'List all available tasks' },
-    'cleanup': { action: 'cleanupBC', help: 'Stops and removes any non-persisted Binci containers' },
+    tasks: { action: 'tasks', help: 'List all available tasks' },
+    cleanup: { action: 'cleanupBC', help: 'Stops and removes any non-persisted Binci containers' },
     'cleanup-all': { action: 'cleanupAll', help: 'Stops and removes ALL docker containers' }
   },
   /**
@@ -55,7 +55,7 @@ const args = {
    * Adds specified service names to disabled list
    */
   disable: () => {
-    services.disabled = Array.isArray(args.raw.d) ? _.unique(args.raw.d) : [ args.raw.d ]
+    services.disabled = Array.isArray(args.raw.d) ? _.unique(args.raw.d) : [args.raw.d]
     if (_.contains('*', services.disabled)) args.disableAll()
   },
   /**

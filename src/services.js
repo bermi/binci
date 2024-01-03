@@ -75,25 +75,25 @@ const services = {
     !cfg.services
       ? false
       : _.map(
-          _.pipe([
-            _.toPairs,
-            _.head,
-            ([name, value]) => ({
+        _.pipe([
+          _.toPairs,
+          _.head,
+          ([name, value]) => ({
+            name,
+            persist: value.persist || false,
+            stopTimeSecs: services.getStopTimeSecs(cfg, value),
+            args: command.get(
+              _.merge(value, {
+                rmOnShutdown: cfg.rmOnShutdown,
+                privileged: cfg.privileged === false ? false : true
+              }),
               name,
-              persist: value.persist || false,
-              stopTimeSecs: services.getStopTimeSecs(cfg, value),
-              args: command.get(
-                _.merge(value, {
-                  rmOnShutdown: cfg.rmOnShutdown,
-                  privileged: cfg.privileged === false ? false : true
-                }),
-                name,
-                null
-              )
-            })
-          ]),
-          cfg.services
-        ),
+              null
+            )
+          })
+        ]),
+        cfg.services
+      ),
   /**
    * Runs services and resolves or rejects
    * @param {array} svc Array of service command arrays
@@ -103,7 +103,7 @@ const services = {
     const errors = []
     return Promise.all(
       _.map((cur) => {
-        let curName = command.getName(cur.name, { persist: cur.persist })
+        const curName = command.getName(cur.name, { persist: cur.persist })
         return proc.exec(`docker ps -f name=${curName} -q`).then((res) => {
           if (res && res.toString().length) return Promise.resolve() // Already running, resolve
           return proc

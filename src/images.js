@@ -62,7 +62,7 @@ const images = {
     const cmd = [
       'docker images',
       '--format',
-      `'{{"{"}}"tag":"{{.Tag}}","createdAt":"{{.CreatedAt}}"{{"}"}}'`,
+      '\'{{"{"}}"tag":"{{.Tag}}","createdAt":"{{.CreatedAt}}"{{"}"}}\'',
       '"--filter=reference=' + images.getProjectName() + ':bc_*"'
     ].join(' ')
     const out = cp.execSync(cmd).toString()
@@ -138,17 +138,17 @@ const images = {
     return Promise.all([
       images.getHash(monitorPaths),
       images.getBuiltImages()
-    ]).then(([ hash, imgs ]) => {
+    ]).then(([hash, imgs]) => {
       if (!hash) {
         throw new Error(`No "from" specified, and ${dockerfile} does not exist.`)
       }
-      const [ image ] = imgs.filter(img => img.hash === hash)
+      const [image] = imgs.filter(img => img.hash === hash)
       if (image) return images.getImageNameFromHash(hash)
       // Find the most recent binci build so we can delete it after the new one builds
       const mostRecent = imgs.reduce((acc, elem) => {
         if (acc.createdAt > elem.createdAt) return acc
         return elem
-      }, {hash: null, createdAt: 0})
+      }, { hash: null, createdAt: 0 })
       tags.push(images.getImageNameFromHash(hash))
       return images.buildImage(dockerfile, tags)
         .then(imageName => {

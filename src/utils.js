@@ -61,7 +61,7 @@ const utils = {
     _.split(/\r?\n/),
     _.drop(1),
     _.map((row) => {
-      let data = _.split(/\s\s+/g, row)
+      const data = _.split(/\s\s+/g, row)
       return [_.last(data), data[3]]
     }),
     _.filter((data) => _.test(/bc_/, _.head(data))),

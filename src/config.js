@@ -43,7 +43,7 @@ const config = {
    */
   validate: (cfg) => _.pipe([
     _.toPairs,
-    _.reject(([key, val]) => !_.contains(key, ['tasks']) && _.isEmpty(val) || _.isNil(val)),
+    _.reject(([key, val]) => (!_.contains(key, ['tasks']) && _.isEmpty(val)) || _.isNil(val)),
     _.fromPairs
   ])(cfg)
 }

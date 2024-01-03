@@ -8,7 +8,7 @@ const process = require('process')
  */
 module.exports = (winPath) => {
   if (process.platform === 'win32' && path.isAbsolute(winPath)) {
-    return ('/' + winPath.replace(':', '').replace(new RegExp('\\\\', 'g'), '/'))
+    return ('/' + winPath.replace(':', '').replace(/\\/g, '/'))
   } else {
     return winPath
   }

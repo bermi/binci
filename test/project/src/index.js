@@ -7,7 +7,6 @@ const event = new EventEmitter()
  * @class mongo
  */
 module.exports = class {
-
   /**
    * Handles setup of connection
    * @param {Object|String} config The db config object or connection string
@@ -96,5 +95,4 @@ module.exports = class {
         })
     })
   }
-
 }

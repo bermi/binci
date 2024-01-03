@@ -12,7 +12,7 @@ describe('database', () => {
     before(() => mongo.createCollection())
     it('executes a command with args supplied', () => mongo.execute('stats')
       .then((res) => {
-        expect(res).to.be.an.object
+        expect(res).to.be.an.object()
       })
     )
   })

@@ -44,12 +44,12 @@ describe('args', () => {
     it('assigns unique values to services.disabled array', () => {
       args.raw = { d: ['foo', 'bar', 'foo'] }
       args.disable()
-      expect(services.disabled).to.deep.equal([ 'foo', 'bar' ])
+      expect(services.disabled).to.deep.equal(['foo', 'bar'])
     })
     it('pushes single value to services.disabled array', () => {
       args.raw = { d: 'foo' }
       args.disable()
-      expect(services.disabled).to.deep.equal([ 'foo' ])
+      expect(services.disabled).to.deep.equal(['foo'])
     })
     it('calls disableAll if * is passed as arg', () => {
       sandbox.spy(args, 'disableAll')
@@ -111,7 +111,7 @@ describe('args', () => {
     })
     it('exits code 1 on fail', () => {
       utils.cleanup.restore()
-      sandbox.stub(utils, 'cleanup', () => Promise.reject())
+      sandbox.stub(utils, 'cleanup', () => Promise.reject(new Error('failed')))
       return args.cleanupBC()
         .then(() => {
           expect(process.exit).to.have.been.calledOnce()
@@ -136,7 +136,7 @@ describe('args', () => {
     })
     it('exits code 1 on fail', () => {
       utils.cleanup.restore()
-      sandbox.stub(utils, 'cleanup', () => Promise.reject())
+      sandbox.stub(utils, 'cleanup', () => Promise.reject(new Error('failed')))
       return args.cleanupAll()
         .then(() => {
           expect(process.exit).to.have.been.calledOnce()
@@ -182,7 +182,7 @@ describe('args', () => {
     it('calls args init method if `init` is passed', () => {
       sinon.stub(process, 'cwd', () => __dirname)
       sandbox.stub(args, 'init')
-      args.raw = { _: [ 'init' ] }
+      args.raw = { _: ['init'] }
       return args.parse().then(() => {
         expect(args.init).to.be.calledOnce()
         process.cwd.restore()
@@ -190,7 +190,7 @@ describe('args', () => {
     })
     it('skips init process if `init` is called but config already exists', () => {
       sandbox.stub(fs, 'statSync', () => true)
-      args.raw = { v: true, _: [ 'init' ] }
+      args.raw = { v: true, _: ['init'] }
       sandbox.stub(args, 'showVersion')
       sandbox.spy(args, 'init')
       return args.parse().then(() => {

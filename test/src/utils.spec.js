@@ -55,7 +55,7 @@ describe('utils', () => {
       cp.execSync.restore()
       proc.run.restore()
       sandbox.stub(cp, 'execSync', () => '123\n')
-      sandbox.stub(proc, 'run', () => Promise.reject())
+      sandbox.stub(proc, 'run', () => Promise.reject(new Error('failed')))
       return utils.cleanup().then(() => {
         expect(output.error).to.have.been.calledOnce()
         expect(output.error).to.have.been.calledWithExactly('123')
