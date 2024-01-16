@@ -31,9 +31,9 @@
     "e2e": "node test/system/run.js",
     "lint": "standard --fix --verbose | snazzy",
     "build": "npm run build:mac && npm run build:linux && npm run build:windows",
-    "build:mac": "pkg . -t node6-mac --out-dir=./bin/mac",
-    "build:linux": "pkg . -t node6-linux --out-dir=./bin/linux",
-    "build:windows": "pkg . -t node6-win --out-dir=./bin/windows",
+    "build:mac": "pkg . -t node18-mac --out-dir=./bin/mac",
+    "build:linux": "pkg . -t node18-linux --out-dir=./bin/linux",
+    "build:windows": "pkg . -t node18-win --out-dir=./bin/windows",
     "release:patch": "npm test && npm version patch && git push origin master && git push --tags && npm publish",
     "release:minor": "npm test && npm version minor && git push origin master && git push --tags && npm publish",
     "release:major": "npm test && npm version major && git push origin master && git push --tags && npm publish"
@@ -65,17 +65,17 @@
     "standard": "^17.1.0"
   },
   "dependencies": {
-    "bluebird": "^3.4.6",
+    "bluebird": "^3.7.2",
     "chalk": "^5.3.0",
     "halcyon": "^0.19.1",
     "input": "^1.0.1",
     "js-yaml": "^4.1.0",
     "log-symbols": "^6.0.0",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.8",
     "ora": "^8.0.1",
     "os-tmpdir": "^2.0.0",
     "semver-compare": "^1.0.0",
-    "shortid": "^2.2.6",
+    "shortid": "^2.2.16",
     "update-notifier": "^7.0.0"
   },
   "standard": {
